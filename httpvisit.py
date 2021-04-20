@@ -375,7 +375,7 @@ def crawler_func(crawler, city_list):
     res = ""
     try:
         res = requests.post(url=url_realtor, data=m_form_data2, headers=headers_realtor)
-        res.raise_for_status()  # 如果响应状态码不是 200，就主动抛出异常
+        res.raise_for_status() 
     except requests.HTTPError as e:
         print(e)
         print("status code", res.status_code)
@@ -420,8 +420,8 @@ def send_mail_func(crawler):
     :return: True for success and False for failure.
     """
     ret = True
-    my_sender = '1833717874@qq.com'  # 发件人邮箱账号
-    my_pass = 'iutxtdkbfhpzccae'  # 发件人邮箱密码
+    my_sender = '1833717874@qq.com'  
+    my_pass = 'iutxtdkbfhpzccae'  
     mail_text = ""
 
     if len(crawler.url_list) == 0:
@@ -435,16 +435,16 @@ def send_mail_func(crawler):
         user_list_len = len(crawler.user_list)
         for j in range(user_list_len):
             msg = MIMEText(mail_text, 'html', 'utf-8')
-            msg['From'] = formataddr(("Realtor", my_sender),)  # 括号里的对应发件人邮箱昵称、发件人邮箱账号
+            msg['From'] = formataddr(("Realtor", my_sender),) 
             my_user = crawler.user_list[j][1]
-            msg['To'] = formataddr(("Honey", my_user),)  # 括号里的对应收件人邮箱昵称、收件人邮箱账号
+            msg['To'] = formataddr(("Honey", my_user),)  
             msg['Subject'] = 'From crawler /realtor.ca Altogether {0} records'.format(url_list_len)
-            server = smtplib.SMTP_SSL("smtp.qq.com", 465)  # 发件人邮箱中的SMTP服务器，端口是25
-            server.login(my_sender, my_pass)  # 括号中对应的是发件人邮箱账号、邮箱密码
-            server.sendmail(my_sender, [my_user, ], msg.as_string())  # 括号中对应的是发件人邮箱账号、收件人邮箱账号、发送邮件
-            server.quit()  # 关闭连接
+            server = smtplib.SMTP_SSL("smtp.qq.com", 465)
+            server.login(my_sender, my_pass) 
+            server.sendmail(my_sender, [my_user, ], msg.as_string())
+            server.quit()
             print("Email have been sent to %s" % crawler.user_list[j][1])
-    except Exception as err:  # 如果 try 中的语句没有执行，则会执行下面的 ret=False
+    except Exception as err:
         print("Email sending failed.err=%s" % err)
         ret = False
     return ret
