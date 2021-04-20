@@ -10,7 +10,7 @@ Postman is another API tools I use to simulate the data. It is easy and convinen
 Pycharm is strongly recommended for python programming. It is powerful for debuging and tunning.
 
 ## Coding with python
-After I got to know the format of realtor.ca, it take me about 2 days to finish the script. After I run and test it can work,I found there are so many warning in pycharm. So,it took me about 2 hours to adjust the coding style.
+After I finished the coding, I found there are so many warning in pycharm(PEP8 coding style). So,it took me about 2 hours to adjust the coding style.
 ### config file
 There is one config file in current run directory
 Here is its format
