@@ -172,10 +172,10 @@ class Crawler(object):
 
             # get the property info
             house_id = list_property['Id']
-            if house_id in self.init_houseid_list:
+            if house_id in self.init_houseid_list or house_id in self.newly_houseid_list:
                 continue
-            else:
-                self.newly_houseid_list.append(house_id)
+
+            self.newly_houseid_list.append(house_id)
 
             mls_number = list_property['MlsNumber']
             publicremarks = list_property['PublicRemarks']
@@ -359,42 +359,42 @@ def crawler_func(crawler, city_list):
     else:
         print("Do not support the city:(%s),exit" % city_name)
         return False
-
-    # crawler the first page and get the basic info
-    page_id = 1
-    data_realtor['CurrentPage'] = page_id
-
     # update other fields.
     data_realtor['PriceMin'] = city_list[1][1]
     data_realtor['PriceMax'] = city_list[2][1]
     data_realtor['BedRange'] = city_list[3][1]
     data_realtor['BathRange'] = city_list[4][1]
+    #crawle the pages.
+    totalpages = 0
+    page_id = 1
+    while True:
+        # crawler the first page and get the basic info
+        data_realtor['CurrentPage'] = page_id
+        m_form_data2 = urlencode(data_realtor)
+        headers_realtor['Content-Length'] = str(len(m_form_data2))
+        res = ""
+        try:
+            res = requests.post(url=url_realtor, data=m_form_data2, headers=headers_realtor)
+            res.raise_for_status()
+        except requests.HTTPError as e:
+            print(e)
+            print("status code", res.status_code)
+            time.sleep(3)
+            return False
+        except requests.RequestException as e:
+            print(e)
+            return False
+        crawler.res_dict = loads(res.content)
+        return_value = crawler.parse_save_db(page_id, city_name)
+        if return_value is False and page_id == 1:
+            return False
+        # get the basic info by crawling first page
+        if page_id == 1:
+            totalpages = crawler.res_dict['Paging']['TotalPages']
+        if page_id == totalpages:
+            break
+        page_id += 1
 
-    m_form_data2 = urlencode(data_realtor)
-    headers_realtor['Content-Length'] = str(len(m_form_data2))
-    res = ""
-    try:
-        res = requests.post(url=url_realtor, data=m_form_data2, headers=headers_realtor)
-        res.raise_for_status() 
-    except requests.HTTPError as e:
-        print(e)
-        print("status code", res.status_code)
-        time.sleep(3)
-        return False
-    except requests.RequestException as e:
-        print(e)
-        return False
-    crawler.res_dict = loads(res.content)
-    return_value = crawler.parse_save_db(page_id, city_name)
-    if return_value is False:
-        return False
-    # get the basic info by crawling first page
-    totalpages = crawler.res_dict['Paging']['TotalPages']
-
-    # crawle the rest pages.
-    for page_id in range(2, totalpages + 1):
-        if crawler.parse_save_db(page_id, city_name) is False:
-            continue
     got_new_records_num = len(my_crawler.newly_houseid_list)
     print("We have got %d new records Now " % got_new_records_num)
     # if we have searched new records,than send them to user's email.
@@ -420,8 +420,8 @@ def send_mail_func(crawler):
     :return: True for success and False for failure.
     """
     ret = True
-    my_sender = '1833717874@qq.com'  
-    my_pass = 'iutxtdkbfhpzccae'  
+    my_sender = '1833717874@qq.com'
+    my_pass = 'iutxtdkbfhpzccae'
     mail_text = ""
 
     if len(crawler.url_list) == 0:
@@ -435,12 +435,12 @@ def send_mail_func(crawler):
         user_list_len = len(crawler.user_list)
         for j in range(user_list_len):
             msg = MIMEText(mail_text, 'html', 'utf-8')
-            msg['From'] = formataddr(("Realtor", my_sender),) 
+            msg['From'] = formataddr(("Realtor", my_sender),)
             my_user = crawler.user_list[j][1]
-            msg['To'] = formataddr(("Honey", my_user),)  
+            msg['To'] = formataddr(("Honey", my_user),)
             msg['Subject'] = 'From crawler /realtor.ca Altogether {0} records'.format(url_list_len)
             server = smtplib.SMTP_SSL("smtp.qq.com", 465)
-            server.login(my_sender, my_pass) 
+            server.login(my_sender, my_pass)
             server.sendmail(my_sender, [my_user, ], msg.as_string())
             server.quit()
             print("Email have been sent to %s" % crawler.user_list[j][1])
