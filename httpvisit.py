@@ -420,8 +420,8 @@ def send_mail_func(crawler):
     :return: True for success and False for failure.
     """
     ret = True
-    my_sender = '1833717874@qq.com'
-    my_pass = 'iutxtdkbfhpzccae'
+    my_sender = ''
+    my_pass = ''
     mail_text = ""
 
     if len(crawler.url_list) == 0:
