@@ -1,5 +1,5 @@
 # OverView
-This is a simple crawling program by python. Python is so powerful in programing for crawling data in internet.   Because our family wants to find/buy a house in ca, so I used this little program to get the property info instantly.
+This is a simple crawling program by python. Python is so powerful in programing for crawling data in internet and this is a simple crawling program.
 ## Analyzing the web page
 There are lots of ways and tools to analyze the web page. Here is my tools.
 ### chrome
