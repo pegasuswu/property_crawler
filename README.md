@@ -14,34 +14,34 @@ After I finished the coding, I found there are so many warning in pycharm(PEP8 c
 ### config file
 There is one config file in current run directory
 Here is its format
-[System]
-Ipaddress=127.0.0.1
-Port=3306
-Citynum=3
-Usernum=1
-[user001]
-Email=1833717874@qq.com
-[city001]
-Name=markham
-PriceMin=1000000
-PriceMax=2000000
-BedRange=1-0
-BathRange=1-0
-[city002] 
-Name=toronto
-PriceMin=1000000
-PriceMax=2000000
-BedRange=1-0
-BathRange=1-0
-[city003] 
-Name=surrey
-PriceMin=1000000
-PriceMax=2000000
-BedRange=1-0
-BathRange=1-0
-I will give the set rules related in future days. Time is so limited for me!
-### crawling thread
-program has a crawling thread which crawls the designated url according to the your set in configuration file. Pay attention：current version only support markham、toronto、vancouver、calgary、ottawa、edmonton、mississauge、montreal、hamilton、surrey.Other cities or regions or provinces can be added in the future or you can added information by yourself.
+[System]  
+Ipaddress=127.0.0.1  
+Port=3306  
+Citynum=3  
+Usernum=1  
+[user001]  
+Email=1833717874@qq.com  
+[city001]  
+Name=markham  
+PriceMin=1000000  
+PriceMax=2000000  
+BedRange=1-0  
+BathRange=1-0  
+[city002]   
+Name=toronto  
+PriceMin=1000000  
+PriceMax=2000000  
+BedRange=1-0  
+BathRange=1-0  
+[city003]   
+Name=surrey  
+PriceMin=1000000  
+PriceMax=2000000  
+BedRange=1-0  
+BathRange=1-0  
+I will give the set rules related in future days. Time is so limited for me!  
+### crawling thread  
+program has a crawling thread which crawls the designated url according to the your set in configuration file. Pay attention：current version only support markham、toronto、vancouver、calgary、ottawa、edmonton、mississauge、montreal、hamilton、surrey.Other cities or regions or provinces can be added in the future or you can added information by yourself.  
 After crawl the new records, program will send email to you instantly.
 In order to avoid the anti-crawling of realtor.ca,after every circle,the program will sleep for 2 minutes.
 ### The using way
